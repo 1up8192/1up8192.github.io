@@ -53471,13 +53471,14 @@ function isExpired(startTime, expiryTime){
 
 function getAllNumbers(roundID) {
   var instance;
-  var results = [];
+  if (roundID < 0) return [];
   return ContractAbstraction.deployed().then(function(_instance){
     instance = _instance;
     return instance.getAllNumbers.call(roundID, {from: account});
   }).then(function(result) {
+    console.log(result);
     var allNumbers = result.split(",");
-    allNumbers.sort();
+    if (allNumbers) allNumbers.sort();
     console.log("get all numbers")
     console.log(allNumbers);
     self.setStatus("Transaction complete!");
@@ -53702,7 +53703,7 @@ window.App = {
       return getRoundStats(numberOfRounds - 3);
     }).then(function(_roundData){
       lastClosedRoundData = _roundData;
-      return getAllNumbers(numberOfRounds - 3)
+      return getAllNumbers(numberOfRounds - 3);
     }).then(function(allNumbers) {
       $("#lastClosedRoundNumber").html(numberOfRounds - 2);
       $("#lastClosedRoundStartTime").html(timestampToDateTime(lastClosedRoundData.startTime));
